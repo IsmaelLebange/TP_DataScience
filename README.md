@@ -387,7 +387,7 @@ Sur un jeu synthétique 2D à 3 clusters gaussiens bien séparés :
 
 ## 👤 Auteur
 
-**Ismaël** — TP Science des Données
+**Ismaël Lebange** — TP Science des Données
 
 ---
 
