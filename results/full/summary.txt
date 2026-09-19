@@ -1,0 +1,14 @@
+PIPELINE COMPLET — NUÉES DYNAMIQUES
+============================================================
+
+seed: 42
+jeux: ['2D_k3', '2D_k5', '3D_k3']
+
+Résultats sur 2D_k3 :
+  point/centroide                W=145.9284 Sil=0.6676 DB=0.4673 n_iter=5
+  point/mediane                  W=182.5077 Sil=0.6439 DB=0.6023 n_iter=5
+  point/medoide                  W=145.9284 Sil=0.6676 DB=0.4954 n_iter=6
+  ensemble_points/centroide      W=145.9284 Sil=0.6676 DB=nan n_iter=6
+  distribution/centroide         W=342.0164 Sil=0.4098 DB=0.6866 n_iter=3
+  axe_factoriel/centroide        W=1626.8712 Sil=-0.0314 DB=nan n_iter=22
+  structure/centroide            W=615.7275 Sil=0.2938 DB=nan n_iter=6
