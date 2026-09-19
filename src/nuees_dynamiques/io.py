@@ -2,37 +2,52 @@ import csv
 import numpy as np
 import os
 
-def load_csv(path,delimiter=",", skip_header=True):
+
+
+def load_csv(path, delimiter=",", skip_header=True):
+    """
+    Charge un CSV numérique.
+    Tolère : lignes vides, valeurs manquantes ('' ou 'NaN'), BOM UTF-8.
+    """
     if not os.path.exists(path):
-        raise FileNotFoundError(f"The file {path} does not exist.")
-    data= []
-    with open(path,"r",newline='') as f:
+        raise FileNotFoundError(f"Fichier introuvable : {path}")
+
+    data = []
+    with open(path, "r", newline="", encoding="utf-8-sig") as f:
         reader = csv.reader(f, delimiter=delimiter)
         for i, row in enumerate(reader):
             if skip_header and i == 0:
                 continue
-            if len(row) == 0:
+            # Ignorer les lignes vides
+            if len(row) == 0 or all(c.strip() == "" for c in row):
                 continue
-            parsed_row = []
-            for item in row:
-                item=item.strip()
-                if item == "" or item.lower() == "nan":
-                    parsed_row.append(np.nan)
+            parsed = []
+            for value in row:
+                v = value.strip()
+                if v == "" or v.lower() == "nan":
+                    parsed.append(np.nan)
                 else:
                     try:
-                        parsed_row.append(float(item))
+                        parsed.append(float(v))
                     except ValueError:
-                        parsed_row.append(item)
-            data.append(parsed_row)
-    if len(data) == 0:
-        raise ValueError(f"The file {path} is empty or contains only headers.")
+                        raise ValueError(
+                            f"Ligne {i+1} : valeur non numérique '{value}'"
+                        )
+            data.append(parsed)
 
+    if len(data) == 0:
+        raise ValueError("Le CSV est vide (aucune ligne de données).")
+
+    # Vérifier la cohérence des colonnes (à partir des données, pas du header)
     n_cols = len(data[0])
     for i, row in enumerate(data):
         if len(row) != n_cols:
-            raise ValueError(f"Row {i+1} in the file {path} does not have the same number of columns as the first row.")
-    return np.array(data,dtype=float)
+            raise ValueError(
+                f"Ligne {i+1} : {len(row)} colonnes au lieu de {n_cols}. "
+                f"Vérifie ton CSV (séparateur, header, lignes vides)."
+            )
 
+    return np.array(data, dtype=float)
 def save_results(labels,centers,inertia,output_dir):
     os.makedirs(output_dir,exist_ok=True)
 
